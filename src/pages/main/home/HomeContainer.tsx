@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { View , ScrollView } from 'react-native'
-
-// 自己封装的fetch，要去请求数据
-import { Fetch } from '../../../util'
+import { inject, observer } from 'mobx-react'
 
 // 样式
 import styles from './styles'
@@ -14,34 +12,27 @@ import HoemSwiper from './homeSwiper/HomeSwiper'
 import HoemBody from './homeBody/HomeBody'
 import HoemFooter from './homeFooter/HomeFooter'
 
-
+ 
 interface Props{ 
-    
+    store?:any
 }
 
-interface State{
-    list:Array<any>
+interface State{ 
+
 }
 
+@inject('store')
+@observer
 class HomeContainer extends Component<Props,State>{
-    constructor(props:any){
-        super(props)
-        this.state={
-            list:[]
-        }
-    }
 
+    // 父组件刚开始发送请求数据的方法，将首页的数据全部请求回来保存到mobx中，再由子组件自己去mobx中去拿
     componentDidMount(){
-        Fetch('/migu/lovev/miguMovie/data/seeFilmData.jsp')
-            .then((res:any)=>{  
-                this.setState({
-                    list:res
-                })
-            })
-    }
-    render(){
-        let {list} = this.state
-        if(!list.length) return false
+        this.props.store.watchList.getWatchList()
+    }  
+ 
+    render(){ 
+        let  { watchList } = this.props.store.watchList
+        if(watchList.length===0) return false
         return(
             <ScrollView 
                 // 去掉垂直滚动条 
@@ -49,9 +40,9 @@ class HomeContainer extends Component<Props,State>{
             >
                 <View style={styles.wrapper}>
                     <Header content='咪咕影院'></Header>  
-                    <HoemSwiper data={list[0]}/>
-                    <HoemBody data={list[1]}/>
-                    <HoemFooter data={list[2]}/>
+                    <HoemSwiper/>
+                    <HoemBody />
+                    <HoemFooter />
                 </View>
             </ScrollView>
         )

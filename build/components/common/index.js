@@ -1,4 +1,5 @@
 import Header from './header';
 import Title from './title';
-export { Header, Title };
+import MovieItem from './movieItem';
+export { Header, Title, MovieItem };
 //# sourceMappingURL=index.js.map

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { View , Image } from 'react-native'
+import { inject , observer } from 'mobx-react'
 // 轮播图
 import Swiper from 'react-native-swiper';
 // 公用组件
@@ -8,12 +9,27 @@ import {Title} from '../../../../components/common'
 import styles from './style'
 
 interface Props{
-    data?:any
+    data?:any,
+    store?:any
 }
-export default class HomeFooter extends Component<Props> {
+
+interface State{
+    list:Array<any>,
+    name:String
+}
+
+@inject('store')
+@observer
+export default class HomeFooter extends Component<Props,State> {
+    constructor(props:any){
+        super(props)
+        this.state={
+            list:this.props.store.watchList.watchActiveList.list,
+            name:this.props.store.watchList.watchActiveList.name
+        }
+    }
 
     renderItems( list:Array<any> ){
-        if(list.length === 0) return false 
         return(
             <Swiper showsPagination={false}>
                 {
@@ -23,31 +39,18 @@ export default class HomeFooter extends Component<Props> {
                         </View>
                     ))
                 }
-                {/* <View style={{flex:1}}>
-                    <Image style={{width:'100%',height:'100%'}} source={{uri:`http://movie.miguvideo.com/publish/i_www/image/70/517/292.gif`}}/>
-                </View> */}
                
             </Swiper>
         )
     }
     render(){
-        let { list } = this.props.data
+        let { list } = this.state
+        if( list.length === 0 ) return false
         return(
             <View style={styles.homeFooterWrapper}>
-                <Title content='精彩活动'/>
+                <Title content={this.state.name} />
                 <View style={{flex:1}}>
                     {this.renderItems(list)}
-                    {/* <Swiper showsPagination={false}>
-                        <View style={{flex:1}}>
-                            <Image style={{width:'100%',height:'100%'}} source={{uri:`http://movie.miguvideo.com/publish/i_www/image/70/517/292.gif`}}/>
-                        </View>
-                        <View style={{flex:1}}>
-                            <Image style={{width:'100%',height:'100%'}} source={{uri:`http://movie.miguvideo.com/publish/i_www/image/70/517/292.gif`}}/>
-                        </View>
-                        <View style={{flex:1}}>
-                            <Image style={{width:'100%',height:'100%'}} source={{uri:`http://movie.miguvideo.com/publish/i_www/image/70/517/292.gif`}}/>
-                        </View>
-                    </Swiper> */}
                 </View>
             </View>
         )

@@ -7,7 +7,7 @@ interface Props{
 
 class Header extends Component<Props>{
     
-    render(){
+    render(){  
         return(
             <View style={styles.head}>
                 <Image style={styles.inconImage} source={{uri:'../../../../assets/images/search_grey.png'}}/>

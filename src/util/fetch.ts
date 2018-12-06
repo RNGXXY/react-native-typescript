@@ -1,8 +1,8 @@
 import config from '../config'
 
-const Fetch = (url:string)=>{
+const Fetch = (url:string,options?:any)=>{
     return new Promise(resolve=>{
-        fetch(config.apihost+url)
+        fetch(config.apihost+url,options)
             .then(response=>response.json())
             .then(res=>resolve(res))
     })

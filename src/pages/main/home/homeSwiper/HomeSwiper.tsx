@@ -2,18 +2,23 @@ import React, { Component } from 'react';
 
 import { View ,  Image} from 'react-native'
 import Swiper from 'react-native-swiper';
+import { inject , observer } from 'mobx-react'
+
 
 import styles from './style'
 
 
 interface Props{
-    data:any
+    store?:any
+    // data?:any
 }
 
 interface State{
     list:Array<any>
 }
 
+@inject('store')
+@observer
 export default class HomeSwiper extends Component<Props,State>{
     constructor(props:any){
         super(props)
@@ -21,16 +26,15 @@ export default class HomeSwiper extends Component<Props,State>{
             list:[]
         }
     }
-
-    componentDidMount(){
-        this.setState({
-            list:this.props.data.list
+  
+    componentDidMount(){   
+        this.setState({   
+            list:this.props.store.watchList.watchSwiperList.list
         })
     }
 
     renderItems(list:Array<any>){
         if(list.length === 0) return false
-        // Alert.alert(JSON.stringify(list.length))
         return (
             <Swiper
                 autoplay={true}
